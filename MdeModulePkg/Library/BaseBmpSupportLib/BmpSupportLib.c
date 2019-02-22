@@ -213,7 +213,7 @@ TranslateBmpToGopBlt (
 
   if ((BmpHeader->Size != BmpImageSize) ||
       (BmpHeader->Size < BmpHeader->ImageOffset) ||
-      (BmpHeader->Size - BmpHeader->ImageOffset != DataSize)) {
+      (BmpHeader->Size - BmpHeader->ImageOffset < DataSize)) {
 
     DEBUG ((DEBUG_ERROR, "TranslateBmpToGopBlt: invalid BmpImage... \n"));
     DEBUG ((DEBUG_ERROR, "   BmpHeader->Size: 0x%x\n", BmpHeader->Size));
