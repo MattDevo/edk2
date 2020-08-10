@@ -28,6 +28,8 @@ SPDX-License-Identifier: BSD-2-Clause-Patent
 #include <Library/BootLogoLib.h>
 #include <Library/IoLib.h>
 #include <Protocol/SmmAccess2.h>
+#include <Library/TcgPhysicalPresenceLib.h>
+#include <Library/Tcg2PhysicalPresenceLib.h>
 
 typedef struct {
   EFI_DEVICE_PATH_PROTOCOL  *DevicePath;

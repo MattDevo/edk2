@@ -1,10 +1,10 @@
-# BTRFS filesystem driver. See */LICENSE.txt for details.
-# https://www.rodsbooks.com/refind/ v0.12
+# ReadOnly exFAT filesystem driver
+# https://efi.akeo.ie/ v1.5
 
 [Defines]
   INF_VERSION                    = 0x00010005
-  BASE_NAME                      = btrfs
-  FILE_GUID                      = a3c66659-21e3-4ff7-8ba6-58291776bbde
+  BASE_NAME                      = exfat
+  FILE_GUID                      = cb683001-379f-48c7-b7b6-707d29454bf5
   MODULE_TYPE                    = UEFI_DRIVER
   VERSION_STRING                 = 1.0
 
@@ -16,7 +16,7 @@
 #
 
 [Binaries.X64]
-  PE32|X64/btrfs.efi|*
+  PE32|X64/exfat.efi|*
 
 [Binaries.IA32]
-  PE32|IA32/btrfs.efi|*
+  PE32|IA32/exfat.efi|*

@@ -165,9 +165,15 @@ PlatformBootManagerBeforeConsole (
   EfiBootManagerGetBootManagerMenu (&BootOption);
   EfiBootManagerAddKeyOptionVariable (NULL, (UINT16) BootOption.OptionNumber, 0, &Escape, NULL);
 
+  // Process TPM PPI request
+  TcgPhysicalPresenceLibProcessRequest();
+  Tcg2PhysicalPresenceLibProcessRequest (NULL);
+
   //
   // Install ready to lock.
   // This needs to be done before option rom dispatched.
+  // In UEFI Payload, PcdPciDisableBusEnumeration == TRUE, thus the PCI BUS driver does not
+  // process any Option ROMs. So there is no risk of 3rd party code being run before ReadyToBoot
   //
   InstallReadyToLock ();
 
@@ -199,6 +205,7 @@ PlatformBootManagerAfterConsole (
   Black.Blue = Black.Green = Black.Red = Black.Reserved = 0;
   White.Blue = White.Green = White.Red = White.Reserved = 0xFF;
 
+  // Logo show
   gST->ConOut->ClearScreen (gST->ConOut);
   BootLogoEnableLogo ();
 
@@ -304,4 +311,3 @@ PlatformBootManagerUnableToBoot (
     EfiBootManagerBoot (&BootManagerMenu);
   }
 }
-

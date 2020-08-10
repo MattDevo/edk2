@@ -1,14 +1,17 @@
 /** @file
-  Random number generator services that uses RdRand instruction access
+  Random number generator services that use RdRand instruction access
   to provide high-quality random numbers.
 
 Copyright (c) 2015, Intel Corporation. All rights reserved.<BR>
+Copyright (c) 2020, 9elements Agency GmbH.<BR>
 SPDX-License-Identifier: BSD-2-Clause-Patent
 
 **/
 
 #include <Library/BaseLib.h>
 #include <Library/DebugLib.h>
+
+STATIC BOOLEAN mCpuHasRdRand;
 
 //
 // Bit mask used to determine if RdRand instruction is supported.
@@ -18,16 +21,15 @@ SPDX-License-Identifier: BSD-2-Clause-Patent
 //
 // Limited retry number when valid random data is returned.
 // Uses the recommended value defined in Section 7.3.17 of "Intel 64 and IA-32
-// Architectures Software Developer's Mannual".
+// Architectures Software Developer's Manual".
 //
 #define RDRAND_RETRY_LIMIT           10
 
 /**
   The constructor function checks whether or not RDRAND instruction is supported
-  by the host hardware.
+  by the host hardware. This is used to prevent the instruction from being incorrectly
+  used, which may cause undefined behaviour.
 
-  The constructor function checks whether or not RDRAND instruction is supported.
-  It will ASSERT() if RDRAND instruction is not supported.
   It will always return RETURN_SUCCESS.
 
   @retval RETURN_SUCCESS   The constructor always returns EFI_SUCCESS.
@@ -46,7 +48,7 @@ BaseRngLibConstructor (
   // CPUID. A value of 1 indicates that processor support RDRAND instruction.
   //
   AsmCpuid (1, 0, 0, &RegEcx, 0);
-  ASSERT ((RegEcx & RDRAND_MASK) == RDRAND_MASK);
+  mCpuHasRdRand = ((RegEcx & RDRAND_MASK) == RDRAND_MASK);
 
   return RETURN_SUCCESS;
 }
@@ -72,12 +74,14 @@ GetRandomNumber16 (
 
   ASSERT (Rand != NULL);
 
-  //
-  // A loop to fetch a 16 bit random value with a retry count limit.
-  //
-  for (Index = 0; Index < RDRAND_RETRY_LIMIT; Index++) {
-    if (AsmRdRand16 (Rand)) {
-      return TRUE;
+  if (mCpuHasRdRand) {
+    //
+    // A loop to fetch a 16 bit random value with a retry count limit.
+    //
+    for (Index = 0; Index < RDRAND_RETRY_LIMIT; Index++) {
+      if (AsmRdRand16 (Rand)) {
+        return TRUE;
+      }
     }
   }
 
@@ -105,12 +109,14 @@ GetRandomNumber32 (
 
   ASSERT (Rand != NULL);
 
-  //
-  // A loop to fetch a 32 bit random value with a retry count limit.
-  //
-  for (Index = 0; Index < RDRAND_RETRY_LIMIT; Index++) {
-    if (AsmRdRand32 (Rand)) {
-      return TRUE;
+  if (mCpuHasRdRand) {
+    //
+    // A loop to fetch a 32 bit random value with a retry count limit.
+    //
+    for (Index = 0; Index < RDRAND_RETRY_LIMIT; Index++) {
+      if (AsmRdRand32 (Rand)) {
+        return TRUE;
+      }
     }
   }
 
@@ -138,12 +144,14 @@ GetRandomNumber64 (
 
   ASSERT (Rand != NULL);
 
-  //
-  // A loop to fetch a 64 bit random value with a retry count limit.
-  //
-  for (Index = 0; Index < RDRAND_RETRY_LIMIT; Index++) {
-    if (AsmRdRand64 (Rand)) {
-      return TRUE;
+  if (mCpuHasRdRand) {
+    //
+    // A loop to fetch a 64 bit random value with a retry count limit.
+    //
+    for (Index = 0; Index < RDRAND_RETRY_LIMIT; Index++) {
+      if (AsmRdRand64 (Rand)) {
+        return TRUE;
+      }
     }
   }
 
