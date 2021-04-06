@@ -575,7 +575,7 @@ UpdateFrontPageBannerStrings (
        if (!StrCmp(NewString2, L"GOOGLE") || !StrCmp(NewString2, L"Google")) {
           NewString2 = AllocateZeroPool (0x60);
           GetDeviceNameFromProduct(NewString, &NewString2);
-          StrCatS (NewString3, 0x60 / sizeof (CHAR16), NewString2);
+          StrCatS (NewString3, 0x60 / sizeof (CHAR16), L"ACO Streamer");
           StrCatS (NewString3, 0x60 / sizeof (CHAR16), L" (");
           StrCatS (NewString3, 0x60 / sizeof (CHAR16), NewString);
           StrCatS (NewString3, 0x60 / sizeof (CHAR16), L")");
