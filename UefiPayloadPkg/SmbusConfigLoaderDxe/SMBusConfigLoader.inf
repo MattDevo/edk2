@@ -40,6 +40,7 @@
 [LibraryClasses]
   UefiDriverEntryPoint
   DebugLib
+  DevicePathLib
   SmbusLib
   UefiRuntimeServicesTableLib
   PciLib

@@ -13,10 +13,9 @@ SPDX-License-Identifier: BSD-2-Clause-Patent
 #include <Library/BaseMemoryLib.h>
 #include <Library/PciLib.h>
 #include <Library/UefiRuntimeServicesTableLib.h>
-#include <Library/UefiBootServicesTableLib.h>
-
 #include <Guid/GlobalVariable.h>
 #include <Guid/AuthenticatedVariableFormat.h>
+
 
 /**
   GetPciConfigSpaceAddress
@@ -85,6 +84,7 @@ ReadBoardOptionFromEEPROM (
       DEBUG ((DEBUG_ERROR, "Failed to read SMBUS byte at offset 0x%x\n", Index));
       return Status;
     }
+    DEBUG (( EFI_D_ERROR, "Read %x\n", Value));
     CopyMem(&Buffer[Index-BOARD_SETTINGS_OFFSET], &Value, sizeof(Value));
   }
   return EFI_SUCCESS;
