@@ -676,10 +676,13 @@ XhcResetHC (
     if (EFI_ERROR (Status)) {
       return Status;
     }
+  } else {
+    DEBUG ((EFI_D_INFO, "Skipped XhcHaltHC\n"));
   }
 
   if ((Xhc->DebugCapSupOffset == 0xFFFFFFFF) || ((XhcReadExtCapReg (Xhc, Xhc->DebugCapSupOffset) & 0xFF) != XHC_CAP_USB_DEBUG) ||
       ((XhcReadExtCapReg (Xhc, Xhc->DebugCapSupOffset + XHC_DC_DCCTRL) & BIT0) == 0)) {
+    DEBUG ((EFI_D_INFO, "Calling XhcSetOpRegBit()\n"));
     XhcSetOpRegBit (Xhc, XHC_USBCMD_OFFSET, XHC_USBCMD_RESET);
     //
     // Some XHCI host controllers require to have extra 1ms delay before accessing any MMIO register during reset.
@@ -687,6 +690,7 @@ XhcResetHC (
     // The below is a workaround to solve such problem.
     //
     gBS->Stall (XHC_1_MILLISECOND);
+    DEBUG ((EFI_D_INFO, "Calling XhcWaitOpRegBit()\n"));
     Status = XhcWaitOpRegBit (Xhc, XHC_USBCMD_OFFSET, XHC_USBCMD_RESET, FALSE, Timeout);
 
     if (!EFI_ERROR (Status)) {
@@ -694,10 +698,12 @@ XhcResetHC (
       // The USBCMD HSEE Bit will be reset to default 0 by USBCMD HCRST.
       // Set USBCMD HSEE Bit if PCICMD SERR# Enable Bit is set.
       //
+      DEBUG ((EFI_D_INFO, "Calling XhcSetHsee()\n"));
       XhcSetHsee (Xhc);
     }
   }
 
+  DEBUG ((EFI_D_INFO, "XhcResetHC complete\n"));
   return Status;
 }
 
@@ -719,7 +725,7 @@ XhcHaltHC (
   )
 {
   EFI_STATUS              Status;
-
+  DEBUG ((EFI_D_INFO, "XhcHaltHC!\n"));
   XhcClearOpRegBit (Xhc, XHC_USBCMD_OFFSET, XHC_USBCMD_RUN);
   Status = XhcWaitOpRegBit (Xhc, XHC_USBSTS_OFFSET, XHC_USBSTS_HALT, TRUE, Timeout);
   return Status;
