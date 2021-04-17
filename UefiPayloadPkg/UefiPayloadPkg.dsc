@@ -314,9 +314,9 @@
   gEfiMdePkgTokenSpaceGuid.PcdDebugPrintErrorLevel|0x8000004F
 !if $(USE_CBMEM_FOR_CONSOLE) == FALSE
    !if $(SOURCE_DEBUG_ENABLE)
-     gEfiMdePkgTokenSpaceGuid.PcdDebugPropertyMask|0x17
+     gEfiMdePkgTokenSpaceGuid.PcdDebugPropertyMask|0x07
    !else
-     gEfiMdePkgTokenSpaceGuid.PcdDebugPropertyMask|0x2B
+     gEfiMdePkgTokenSpaceGuid.PcdDebugPropertyMask|0x23
    !endif
 !else
   gEfiMdePkgTokenSpaceGuid.PcdDebugPropertyMask|0x03
