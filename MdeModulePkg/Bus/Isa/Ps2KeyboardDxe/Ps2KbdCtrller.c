@@ -1700,20 +1700,12 @@ InitKeyboard (
       KeyboardError (ConsoleIn, L"8042 controller data write error!\n\r");
       goto Done;
     }
-
+    //
+    // wait for BAT completion
+    //
     Status = KeyboardWaitForValue (ConsoleIn, KEYBOARD_8048_RETURN_8042_ACK);
     if (EFI_ERROR (Status)) {
       KeyboardError (ConsoleIn, L"Some specific value not acquired from 8042 controller!\n\r");
-      goto Done;
-    }
-    //
-    // wait for BAT completion code
-    //
-    mWaitForValueTimeOut  = KEYBOARD_BAT_TIMEOUT;
-
-    Status                = KeyboardWaitForValue (ConsoleIn, KEYBOARD_8048_RETURN_8042_BAT_SUCCESS);
-    if (EFI_ERROR (Status)) {
-      KeyboardError (ConsoleIn, L"Keyboard self test failed!\n\r");
       goto Done;
     }
 
