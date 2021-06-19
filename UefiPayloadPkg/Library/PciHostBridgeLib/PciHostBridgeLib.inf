@@ -39,4 +39,3 @@
   DevicePathLib
   MemoryAllocationLib
   PciLib
-  DxeServicesTableLib
